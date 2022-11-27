@@ -14,3 +14,4 @@ jobs:
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           customArgs: --dart-define="googleScriptURL=${{ secrets.GOOGLE_SCRIPT_URL }}"
+          baseHref: /names/
