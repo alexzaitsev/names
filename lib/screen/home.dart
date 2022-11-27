@@ -63,27 +63,47 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget topContent() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text('$strHomeChoose ', style: h2()),
-        AnimatedTextKit(
-          animatedTexts: strHomeTopWords
-              .map((nameDescr) => TypewriterAnimatedText(nameDescr,
-                  textStyle: h2().copyWith(
-                      fontWeight: FontWeight.bold, color: Colors.yellow),
-                  speed: const Duration(milliseconds: 50),
-                  cursor: ' '))
-              .toList(),
-          totalRepeatCount: 1,
-          pause: const Duration(milliseconds: 1000),
-          displayFullTextOnTap: false,
-          stopPauseOnTap: false,
-        ),
-        Text(strHomeUkrName, style: h2())
-      ],
-    );
+    var width = MediaQuery.of(context).size.width;
+    if (width > 1000) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [top1Line(), top2Line(), top3Line()],
+      );
+    } else if (width > 600) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [top1Line(), top2Line()]),
+          top3Line()
+        ],
+      );
+    } else {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [top1Line(), top2Line(), top3Line()],
+      );
+    }
   }
+
+  Widget top1Line() => Text('$strHomeChoose ', style: h2());
+
+  Widget top2Line() => AnimatedTextKit(
+        animatedTexts: strHomeTopWords
+            .map((nameDescr) => TypewriterAnimatedText(nameDescr,
+                textStyle: h2().copyWith(
+                    fontWeight: FontWeight.bold, color: Colors.yellow),
+                speed: const Duration(milliseconds: 50),
+                cursor: ' '))
+            .toList(),
+        totalRepeatCount: 1,
+        pause: const Duration(milliseconds: 1000),
+        displayFullTextOnTap: false,
+        stopPauseOnTap: false,
+      );
+
+  Widget top3Line() => Text(strHomeUkrName, style: h2());
 
   Widget bottomContent() {
     return Column(children: [
@@ -146,7 +166,9 @@ class _MyHomePageState extends State<MyHomePage> {
         if (snapshot.hasData) {
           // update data
           names = snapshot.data!;
-          _nextName();
+          if (current == null) {
+            _nextName();
+          }
           // view
           return bottomContent();
         } else if (snapshot.hasError) {
