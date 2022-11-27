@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (width > 600) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -82,12 +83,13 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [top1Line(), top2Line(), top3Line()],
       );
     }
   }
 
-  Widget top1Line() => Text('$strHomeChoose ', style: h2());
+  Widget top1Line() => Text('$strHomeChoose ', style: h2(), textAlign: TextAlign.center);
 
   Widget top2Line() => AnimatedTextKit(
         animatedTexts: strHomeTopWords
