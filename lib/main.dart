@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: MyHomePage(googleScriptURL: googleScriptURL,),
+      home: MyHomePage(googleScriptURL: googleScriptURL),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:ukrnames/controller/google_sheet_controller.dart';
 import 'package:ukrnames/model/name.dart';
+import '../strings.dart';
 import 'details.dart';
 import 'package:ukrnames/theme.dart';
 
@@ -16,23 +17,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> topWords = [
-    'справжнє',
-    'популярне',
-    'історичне',
-    'оригінальне',
-    'ідеальне',
-    'своє'
-  ];
-
-  late Future<List<Name>> futureNames;
+  late Future<List<Name>> fNames;
   late List<Name> names;
   Name? current;
 
   @override
   void initState() {
     super.initState();
-    futureNames = fetchNames(widget.googleScriptURL);
+    fNames = futureNames(widget.googleScriptURL);
   }
 
   void _nextName() {
@@ -48,44 +40,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Name>>(
-      future: futureNames,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          // update data
-          names = snapshot.data!;
-          _nextName();
-          // view
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                flex: 1,
-                child: Container(
-                    constraints: const BoxConstraints.expand(),
-                    alignment: Alignment.center,
-                    color: Colors.blueAccent,
-                    child: topContent()),
-              ),
-              Flexible(
-                  flex: 1,
-                  child: Container(
-                      constraints: const BoxConstraints.expand(),
-                      alignment: Alignment.center,
-                      color: Colors.yellow,
-                      child: bottomContent()))
-            ],
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-
-        // By default, show a loading spinner.
-        return Container(
-          alignment: Alignment.center,
-          child: const CircularProgressIndicator(color: Colors.blueAccent),
-        );
-      },
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Flexible(
+          flex: 1,
+          child: Container(
+              constraints: const BoxConstraints.expand(),
+              alignment: Alignment.center,
+              color: Colors.blueAccent,
+              child: topContent()),
+        ),
+        Flexible(
+            flex: 1,
+            child: Container(
+                constraints: const BoxConstraints.expand(),
+                alignment: Alignment.center,
+                color: Colors.yellow,
+                child: loadFemaleNames()))
+      ],
     );
   }
 
@@ -93,9 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Обери ', style: h2()),
+        Text('$strHomeChoose ', style: h2()),
         AnimatedTextKit(
-          animatedTexts: topWords
+          animatedTexts: strHomeTopWords
               .map((nameDescr) => TypewriterAnimatedText(nameDescr,
                   textStyle: h2().copyWith(
                       fontWeight: FontWeight.bold, color: Colors.yellow),
@@ -107,21 +80,21 @@ class _MyHomePageState extends State<MyHomePage> {
           displayFullTextOnTap: false,
           stopPauseOnTap: false,
         ),
-        Text('українське імʼя', style: h2())
+        Text(strHomeUkrName, style: h2())
       ],
     );
   }
 
   Widget bottomContent() {
     return Column(children: [
-      Spacer(),
+      const Spacer(),
       Text(current!.name.toUpperCase(),
           textAlign: TextAlign.center,
           style: const TextStyle(
               color: Colors.black,
               letterSpacing: 4,
               decoration: TextDecoration.none)),
-      Spacer(),
+      const Spacer(),
       TextButton(
         style: TextButton.styleFrom(
           foregroundColor: Colors.black,
@@ -143,11 +116,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 }),
           );
         },
-        child: const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('Дізнатись більше про це імʼя')),
+        child: Padding(
+            padding: const EdgeInsets.all(16.0), child: Text(strHomeKnowMore)),
       ),
-      SizedBox(height: 10),
+      const SizedBox(height: 10),
       ElevatedButton(
         style: TextButton.styleFrom(
           backgroundColor: Colors.white,
@@ -159,11 +131,35 @@ class _MyHomePageState extends State<MyHomePage> {
             _nextName();
           });
         },
-        child: const Padding(
-            padding: EdgeInsets.all(16.0), child: Text('Показати інше імʼя')),
+        child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(strHomeShowAnother)),
       ),
-      Spacer(),
+      const Spacer(),
     ]);
+  }
+
+  Widget loadFemaleNames() {
+    return FutureBuilder<List<Name>>(
+      future: fNames,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          // update data
+          names = snapshot.data!;
+          _nextName();
+          // view
+          return bottomContent();
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        // By default, show a loading spinner.
+        return Container(
+          alignment: Alignment.center,
+          child: const CircularProgressIndicator(color: Colors.blueAccent),
+        );
+      },
+    );
   }
 
 // Route _routeToDetails() {

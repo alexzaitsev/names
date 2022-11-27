@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../model/name.dart';
 
-Future<List<Name>> fetchNames(String url) async {
+Future<List<Name>> futureNames(String url) async {
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
