@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../keys.dart';
 import '../model/name.dart';
 
-Future<List<Name>> fetchNames() async {
-  final response = await http.get(Uri.parse(googleScriptURL));
+Future<List<Name>> fetchNames(String url) async {
+  final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

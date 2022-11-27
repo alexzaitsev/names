@@ -7,7 +7,9 @@ import 'details.dart';
 import 'package:ukrnames/theme.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final String googleScriptURL;
+
+  const MyHomePage({super.key, required this.googleScriptURL});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -30,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    futureNames = fetchNames();
+    futureNames = fetchNames(widget.googleScriptURL);
   }
 
   void _nextName() {

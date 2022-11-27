@@ -3,9 +3,9 @@ import 'package:ukrnames/model/name.dart';
 import 'package:ukrnames/theme.dart';
 
 class DetailsPage extends StatefulWidget {
-  const DetailsPage({super.key, required this.name});
-
   final Name name;
+
+  const DetailsPage({super.key, required this.name});
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'screen/home.dart';
 
 void main() {
-  runApp(const MyApp());
+  String googleScriptURL = const String.fromEnvironment('googleScriptURL');
+  runApp(MyApp(googleScriptURL: googleScriptURL));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String googleScriptURL;
+
+  const MyApp({super.key, required this.googleScriptURL});
 
   // This widget is the root of your application.
   @override
@@ -16,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(),
+      home: MyHomePage(googleScriptURL: googleScriptURL,),
     );
   }
 }
